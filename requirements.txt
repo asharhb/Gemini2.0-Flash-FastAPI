@@ -10,3 +10,6 @@ pydantic
 google-generativeai
 PyPDF2
 pillow
+asyncio
+uuid
+docx2txt
