@@ -1,14 +1,22 @@
 # Gemini 2.0 Flash FastAPI Application
 
-A powerful REST API built with FastAPI for processing documents using Google's Gemini 2.0 Flash AI model. This application extracts text from various document formats, processes it with Gemini AI, and stores structured data in PostgreSQL.
+A powerful REST API built with FastAPI for processing documents using Google's Gemini 2.0 Flash AI model. This
+application extracts text from various document formats, processes it with Gemini AI, and stores structured data in
+PostgreSQL.
 
 ## ✨ Features
 
-- 📄 Upload and process multiple document formats (TXT, PDF, PNG, JPG, JPEG)
-- 🔍 Extract text from images and PDFs
-- 🤖 Process extracted text with Google's Gemini 2.0 Flash AI
-- 💾 Store structured results in PostgreSQL database
-- 🔄 Retrieve processed documents via intuitive API endpoints
+- 📄 Upload and process multiple document types (TXT, PDF, PNG, JPG, JPEG, DOCX, CSV)
+- 🔍 Extract text, even from scanned images using Gemini’s multimodal capabilities
+- 🤖 Use Gemini 2.0 Flash AI to:
+    - Extract structured data (names, dates, monetary values, etc.)
+    - Categorize document type (e.g., Invoice, Receipt) and financial relevance (Income/Expense)
+    - Generate document summaries
+- 🧠 Gemini-powered JSON data extraction and summarization
+- 🔄 Batch upload and background processing of multiple documents
+- 📊 Statistical insights on document categories and types
+- 🧹 Delete individual documents or entire batches
+- 📦 Clean and modular architecture with FastAPI + SQLAlchemy + PostgreSQL
 
 ## 🛠️ Tech Stack
 
@@ -80,7 +88,7 @@ CREATE DATABASE documents_db;
 Start the FastAPI server:
 
 ```bash
-uvicorn main:app --reload
+"fastapi dev" or "uvicorn main:app --reload" 
 ```
 
 The API will be available at: http://localhost:8000
@@ -103,8 +111,10 @@ gemini2.0-flash-fastapi/
 ## 🔌 API Endpoints
 
 ### `GET /`
+
 - **Description**: Root endpoint to check if the API is running
 - **Response**:
+
 ```json
 {
   "message": "Gemini 2.0 Flash Document Processor API"
@@ -112,31 +122,94 @@ gemini2.0-flash-fastapi/
 ```
 
 ### `POST /upload-document`
+
 - **Description**: Upload a document for processing
 - **Request**: Multipart form with a file (`file`)
 - **Supported file types**: `.txt`, `.pdf`, `.png`, `.jpg`, `.jpeg`
 - **Response**:
+
 ```json
 {
   "id": 1,
   "filename": "invoice.pdf",
-  "extracted_data": { /* structured data */ },
-  "timestamp": "2025-05-14T12:00:00"
+  "file_type": ".pdf",
+  "file_size": 43121,
+  "summary": "...",
+  "extracted_data": {
+    /* structured data */
+  },
+  "created_at": "2025-08-02T12:34:56",
+  "category": {
+    "primary_category": "INVOICE",
+    "financial_type": "INCOME",
+    "confidence": 0.92,
+    "reasoning": "..."
+  }
 }
 ```
 
 ### `GET /documents`
+
 - **Description**: Retrieve all processed documents
 - **Response**: Array of document objects
 
 ### `GET /documents/{document_id}`
+
 - **Description**: Retrieve a specific document by ID
 - **Path Parameter**: `document_id` (integer)
 - **Response**: Document object
 
+### `POST /batch-upload`
+
+- **Description**: Upload and process multiple files in the background.
+- **Request**: `multipart/form-data with files: List[UploadFile]
+- **Response**:
+
+```json
+{
+  "batch_id": "batch_abcd1234",
+  "status": "PENDING",
+  "uploaded_files": [
+    "file1.pdf",
+    "file2.jpg"
+  ]
+}
+
+```
+
+### `GET /batch-status/{batch_id}`
+
+- **Description**: Check status and completion of a batch.
+- **Optional Query**: include_documents=true
+- **Response**:
+
+```json
+{
+  "batch_id": "batch_abcd1234",
+  "status": "COMPLETED",
+  "processed": 5,
+  "total": 5,
+  "completion_percentage": 100.0,
+  "documents": [
+    ...
+  ]
+}
+
+
+```
+
+### `GET /categories`
+
+- **Description**: Returns a list of all document categorization records.
+
+### `DELETE /documents/{document_id}`
+
+- **Description**: Delete a specific document.
+
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/asharhb/Gemini2.0-Flash-FastAPI/issues).
+Contributions, issues, and feature requests are welcome! Feel free to check
+the [issues page](https://github.com/asharhb/Gemini2.0-Flash-FastAPI/issues).
 
 ## 📜 License
 

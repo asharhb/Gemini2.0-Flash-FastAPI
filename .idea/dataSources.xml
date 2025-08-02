@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="geminiflash@localhost" uuid="95009b81-39b0-4252-bc67-4ecc2d8ec175">
+    <data-source source="LOCAL" name="geminiflash@localhost" uuid="d2283859-1025-4ded-8308-d1abc754799b">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
